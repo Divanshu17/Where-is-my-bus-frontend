@@ -12,6 +12,11 @@ import {
   CheckIcon,
   XMarkIcon,
   AdjustmentsHorizontalIcon,
+   // For: Bus Cancelled
+  ArrowPathIcon, // For: Diversion Alert
+  ClockIcon, // For: Delay Notifications
+   // For: Service Resumed
+ 
 } from "@heroicons/react/24/outline";
 import SideNavBar from "./components/SideNavBar";
 
@@ -27,72 +32,74 @@ function Notifications() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setNotifications([
-    {
-      id: 1,
-      title: "Bus 101 Delayed",
-          message:
-            "Your bus is running 5 minutes late due to traffic congestion on Main Street. Please plan accordingly.",
-      time: "5 min ago",
+        {
+          id: 1,
+          title: "Bus RJ14MK5562 Cancelled",
+          message: "Bus RJ14MK5562 has been cancelled due to an engine malfunction near Badi Chaupar. We apologize for the inconvenience.",
+          time: "Just now",
           type: "alert",
+          busNumber: "RJ14MK5562",
           read: false,
           icon: <ExclamationTriangleIcon className="h-5 w-5" />,
-          color: "#EF4444", 
-          route: "101",
-          actionable: true,
-    },
-    {
-      id: 2,
-      title: "Route Change",
-          message:
-            "Route 202 has been temporarily modified due to road work on Park Avenue. The bus will detour via Oak Street until further notice.",
-      time: "1 hour ago",
+          color: "#EF4444"
+        },
+        {
+          id: 2,
+          title: "Diversion Alert for RJ14PA7894",
+          message: "Bus RJ14PA7894 is diverted via Tonk Road instead of JLN Marg due to heavy waterlogging. Please check alternate stops.",
+          time: "5 min ago",
           type: "info",
+          busNumber: "RJ14PA7894",
           read: false,
-          icon: <InformationCircleIcon className="h-5 w-5" />,
-          color: "#3B82F6", 
-          route: "202",
-          actionable: false,
-    },
-    {
-      id: 3,
-      title: "Service Update",
-          message:
-            "Normal service has resumed on all routes following the earlier disruption. Thank you for your patience.",
-      time: "2 hours ago",
-          type: "success",
-          read: true,
-          icon: <CheckCircleIcon className="h-5 w-5" />,
-          color: "#10B981", // green
-          route: "All",
-          actionable: false,
+          icon: <ArrowPathIcon className="h-5 w-5" />,
+          color: "#F97316"
+        },
+        {
+          id: 3,
+          title: "RJ14PG2349 Delayed",
+          message: "Bus RJ14PG2349 is running 12 minutes late due to a traffic jam near Sodala flyover.",
+          time: "15 min ago",
+          type: "alert",
+          busNumber: "RJ14PG2349",
+          read: false,
+          icon: <ClockIcon className="h-5 w-5" />,
+          color: "#F59E0B"
         },
         {
           id: 4,
-          title: "Weekend Schedule",
-          message:
-            "Reminder: This weekend all buses will operate on a reduced frequency schedule due to the holiday.",
-          time: "1 day ago",
-          type: "info",
+          title: "RJ14CG7833 Resumed Service",
+          message: "Service has resumed for RJ14CG7833 after a brief delay. Next stop: Civil Lines Metro Station.",
+          time: "30 min ago",
+          type: "success",
+          busNumber: "RJ14CG7833",
           read: true,
-          icon: <InformationCircleIcon className="h-5 w-5" />,
-          color: "#3B82F6", // blue
-          route: "All",
-          actionable: false,
+          icon: <CheckCircleIcon className="h-5 w-5" />,
+          color: "#10B981"
         },
         {
           id: 5,
-          title: "Bus 303 Arriving Soon",
-          message:
-            "Your tracked bus (Route 303) will arrive at your stop in approximately 3 minutes.",
-          time: "2 days ago",
-          type: "alert",
+          title: "RJ14AW1223 Skipped Stop",
+          message: "Bus RJ14AW1223 has skipped stop at Gopalpura Bypass due to ongoing roadwork. Next stop: Triveni Nagar.",
+          time: "1 hour ago",
+          type: "info",
+          busNumber: "RJ14AW1223",
+          read: true,
+          icon: <InformationCircleIcon className="h-5 w-5" />,
+          color: "#3B82F6"
+        },
+        {
+          id: 6,
+          title: "RJ14CA7859 Early Arrival",
+          message: "Bus RJ14CA7859 arrived 6 minutes early at Mansarovar Metro Station. Please be ready at your stop.",
+          time: "2 hours ago",
+          type: "info",
+          busNumber: "RJ14CA7859",
           read: true,
           icon: <BellAlertIcon className="h-5 w-5" />,
-          color: "#F59E0B", 
-          route: "303",
-          actionable: true,
-        },
-      ]);
+          color: "#6366F1"
+        }
+      ]
+      );
       setIsLoading(false);
     }, 1000);
 
@@ -244,11 +251,11 @@ function Notifications() {
             className="p-2 rounded-full hover:bg-[#d9c9a8]/50 transition-colors"
           >
             <Bars3Icon className="h-6 w-6 text-gray-800" />
-        </button>
+          </button>
           <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent flex items-center">
             <BellAlertIcon className="h-6 w-6 mr-2 text-gray-800" />
-          Notifications
-        </h2>
+            Notifications
+          </h2>
           <div className="relative">
             <button
               onClick={() => setShowFilterMenu(!showFilterMenu)}
@@ -383,8 +390,8 @@ function Notifications() {
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500"
               />
             )}
-        </button>
-      </div>
+          </button>
+        </div>
       </header>
 
       {/* Sidebar */}
@@ -419,8 +426,8 @@ function Notifications() {
               className="space-y-4"
             >
               {filteredNotifications.map((notification) => (
-          <motion.div
-            key={notification.id}
+                <motion.div
+                  key={notification.id}
                   variants={itemVariants}
                   whileHover={{ y: -2 }}
                   onClick={() => viewNotificationDetails(notification)}
@@ -499,8 +506,8 @@ function Notifications() {
           ) : (
             <motion.div
               key="empty-state"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="bg-white/90 backdrop-blur-sm rounded-xl shadow-md p-8 text-center border border-gray-200 mt-4"
             >
@@ -618,7 +625,7 @@ function Notifications() {
                     </button>
                   )}
                 </div>
-            </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
