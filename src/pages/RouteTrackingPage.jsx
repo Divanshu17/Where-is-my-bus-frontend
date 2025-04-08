@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { MapPin, Clock, ArrowLeft, Bus, AlertCircle } from "lucide-react";
 import { motion } from "framer-motion";
+import { getApiUrl, ENDPOINTS } from "../config/api";
 import SeatAvailability from "../components/SeatAvailability";
 
 const RouteDetailsPage = () => {
@@ -176,7 +177,7 @@ const RouteDetailsPage = () => {
     const fetchSeatData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:5000/api/seats/${routeId}`
+          `${getApiUrl(ENDPOINTS.SEATS)}/${routeId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch seat data");

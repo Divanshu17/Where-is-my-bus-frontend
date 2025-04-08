@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import axios from "axios";
+import { getApiUrl, ENDPOINTS } from "../config/api";
 import {
   ArrowLeft,
   CreditCard,
@@ -113,23 +113,20 @@ const PaymentPage = () => {
         fare: selectedStopFare,
       });
 
-      const ticketResponse = await fetch(
-        "http://localhost:5000/api/tickets/book",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            routeId,
-            passengerName,
-            passengerEmail,
-            source,
-            destination: selectedStop,
-            fare: selectedStopFare.replace("₹", ""),
-          }),
-        }
-      );
+      const ticketResponse = await fetch(getApiUrl(ENDPOINTS.BOOK_TICKET), {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          routeId,
+          passengerName,
+          passengerEmail,
+          source,
+          destination: selectedStop,
+          fare: selectedStopFare.replace("₹", ""),
+        }),
+      });
 
       if (!ticketResponse.ok) {
         const errorData = await ticketResponse.json();

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { getApiUrl, ENDPOINTS } from "../config/api";
 import {
   Bars3Icon,
   ArrowLeftIcon,
@@ -71,7 +72,7 @@ function Profile() {
     }
 
     // Send update request to backend
-    fetch("http://localhost:5000/api/users/profile", {
+    fetch(getApiUrl(ENDPOINTS.PROFILE), {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

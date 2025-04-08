@@ -90,7 +90,7 @@ function SignUp() {
       const { name, email, picture } = JSON.parse(jsonPayload);
 
       // Send Google auth data to your backend
-      fetch("http://localhost:5000/api/users/google-auth", {
+      fetch(getApiUrl("/users/google-auth"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
