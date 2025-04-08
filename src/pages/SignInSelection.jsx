@@ -101,14 +101,16 @@ function SignInSelection() {
         <ArrowLeftIcon className="h-6 w-6 text-gray-800" />
       </motion.button>
 
-      {/* Language Selector */}
+      {/* Language Selector - repositioned for mobile */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="absolute top-8 right-8 z-10"
+        className="absolute top-2 right-2 z-20 md:top-8 md:right-8 md:z-10"
       >
-        <LanguageSelector />
+        <div className="bg-white/80 backdrop-blur-sm rounded-full shadow-md">
+          <LanguageSelector />
+        </div>
       </motion.div>
 
       <motion.div
@@ -122,7 +124,7 @@ function SignInSelection() {
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="inline-block mb-4 bg-white/30 backdrop-blur-sm p-4 rounded-full"
+            className="inline-block mb-4 bg-white/30 backdrop-blur-sm p-4 rounded-full mt-16 md:mt-0" /* Increased margin-top for mobile */
           >
             <motion.div
               animate={{

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLanguage, languages } from "../context/LanguageContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
@@ -8,6 +8,23 @@ const LanguageSelector = () => {
   const { language, changeLanguage } = useLanguage();
   const t = translations[language];
   const [isHovered, setIsHovered] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect if we're on mobile
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkIfMobile();
+
+    // Add event listener
+    window.addEventListener("resize", checkIfMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkIfMobile);
+  }, []);
 
   const isHindi = language === languages.HINDI;
 
@@ -23,7 +40,7 @@ const LanguageSelector = () => {
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
     >
-      <div className="flex items-center space-x-3 p-2 rounded-xl bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-all">
+      <div className="flex items-center space-x-1 md:space-x-3 p-1 md:p-2 rounded-xl bg-white/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-all">
         <motion.div
           animate={{
             rotate: isHovered ? [0, 20, -20, 0] : 0,
@@ -34,6 +51,7 @@ const LanguageSelector = () => {
             repeatType: "loop",
             ease: "easeInOut",
           }}
+          className="hidden md:block"
         >
           <GlobeAltIcon className="h-5 w-5 text-gray-600" />
         </motion.div>
@@ -44,7 +62,7 @@ const LanguageSelector = () => {
           className="relative flex items-center cursor-pointer"
         >
           {/* Track */}
-          <div className="w-20 h-10 bg-gradient-to-r from-blue-500 to-amber-500 rounded-full shadow-inner overflow-hidden">
+          <div className="w-16 h-8 md:w-20 md:h-10 bg-gradient-to-r from-blue-500 to-amber-500 rounded-full shadow-inner overflow-hidden">
             {/* Highlight overlay */}
             <div className="absolute inset-0 flex justify-between items-center px-2 text-white font-medium">
               <span
@@ -65,9 +83,9 @@ const LanguageSelector = () => {
 
             {/* Thumb */}
             <motion.div
-              className="absolute top-1 w-8 h-8 bg-white rounded-full shadow-md flex items-center justify-center text-lg"
+              className="absolute top-1 w-6 h-6 md:w-8 md:h-8 bg-white rounded-full shadow-md flex items-center justify-center text-sm md:text-lg"
               animate={{
-                x: isHindi ? 44 : 4,
+                x: isHindi ? (isMobile ? 34 : 44) : 4,
                 rotate: isHovered ? 360 : 0,
               }}
               transition={{
@@ -80,7 +98,7 @@ const LanguageSelector = () => {
           </div>
         </div>
 
-        {/* Current language name */}
+        {/* Current language name - hidden on mobile */}
         <AnimatePresence mode="wait">
           <motion.span
             key={language}
@@ -88,7 +106,7 @@ const LanguageSelector = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.2 }}
-            className="text-sm font-medium text-gray-700 min-w-[60px]"
+            className="hidden md:inline-block text-sm font-medium text-gray-700 min-w-[60px]"
           >
             {isHindi ? t.hindi : t.english}
           </motion.span>

@@ -58,21 +58,25 @@ function FeedbackPage() {
       id: "bus_service",
       label: t.busService,
       icon: <TruckIcon className="h-5 w-5" />,
+      description: "Bus Condition & Service",
     },
     {
       id: "app_experience",
       label: t.appExperience,
       icon: <UserIcon className="h-5 w-5" />,
+      description: "App Experience",
     },
     {
       id: "driver_behavior",
       label: t.driverBehavior,
       icon: <UserIcon className="h-5 w-5" />,
+      description: "Driver Behavior",
     },
     {
       id: "route_timing",
       label: t.routeTiming,
       icon: <ArrowLeftIcon className="h-5 w-5" />,
+      description: "Route & Timing",
     },
   ];
 
@@ -116,8 +120,8 @@ function FeedbackPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#f0e6d2] to-[#d9c9a8] relative">
-      {/* Animated background elements - reduced opacity and blur for clarity */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Animated background elements - fixed z-index to stay behind content */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {[...Array(3)].map((_, i) => (
           <motion.div
             key={i}
@@ -127,6 +131,7 @@ function FeedbackPage() {
               left: `${Math.random() * 100}%`,
               width: `${Math.random() * 200 + 50}px`,
               height: `${Math.random() * 200 + 50}px`,
+              zIndex: -1 /* Ensure animations stay behind content */,
             }}
             animate={{
               y: [0, Math.random() * 20 - 10],
@@ -190,13 +195,13 @@ function FeedbackPage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="w-full max-w-md mx-auto"
+          className="w-full max-w-md mx-auto relative z-10"
         >
           {/* Feedback Form - improved contrast and reduced blur */}
           <motion.form
             variants={itemVariants}
             onSubmit={handleSubmit}
-            className="bg-white shadow-lg rounded-xl p-6 border border-gray-200"
+            className="bg-white shadow-lg rounded-xl p-6 border border-gray-200 relative z-10"
           >
             <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
               <ChatBubbleBottomCenterTextIcon className="h-5 w-5 mr-2 text-blue-600" />
@@ -283,6 +288,9 @@ function FeedbackPage() {
                       </div>
                       <span className="text-xs font-semibold">
                         {category.label}
+                      </span>
+                      <span className="text-[10px] text-gray-500 mt-1">
+                        {category.description}
                       </span>
                     </div>
                   </button>

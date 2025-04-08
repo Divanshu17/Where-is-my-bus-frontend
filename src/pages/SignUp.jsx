@@ -495,28 +495,37 @@ function SignUp() {
               >
                 {/* Password */}
                 <motion.div variants={itemVariants} className="relative">
-                  <LockClosedIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" />
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    placeholder="Create a Password"
-                    className={`w-full pl-10 pr-12 py-3 border rounded-lg shadow-sm bg-white/80 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all ${
-                      formErrors.password ? "border-red-500" : "border-gray-300"
-                    }`}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
-                  >
-                    {showPassword ? (
-                      <EyeSlashIcon className="h-5 w-5" />
-                    ) : (
-                      <EyeIcon className="h-5 w-5" />
-                    )}
-                  </button>
+                  <div className="relative flex items-center">
+                    <LockClosedIcon className="h-5 w-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2 z-10" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      placeholder="Create a Password"
+                      className={`w-full pl-10 pr-14 py-3 border rounded-lg shadow-sm bg-white/80 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all ${
+                        formErrors.password
+                          ? "border-red-500"
+                          : "border-gray-300"
+                      }`}
+                    />
+                    <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        aria-label={
+                          showPassword ? "Hide password" : "Show password"
+                        }
+                      >
+                        {showPassword ? (
+                          <EyeSlashIcon className="h-5 w-5" />
+                        ) : (
+                          <EyeIcon className="h-5 w-5" />
+                        )}
+                      </button>
+                    </div>
+                  </div>
                   {formErrors.password ? (
                     <p className="text-red-500 text-xs mt-1 pl-2">
                       {formErrors.password}
