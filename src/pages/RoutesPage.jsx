@@ -301,7 +301,49 @@ function RoutesPage() {
       arrivalTime: "11:20 AM",
       fare: "₹18",
       busType: "Non-AC",
-    }
+    },
+    {
+      id: 15,
+      number: "RJ 15MK 7859",
+      name: "Mahatma Gandhi To Ajmeri Gate:",
+      eta: "37 min",
+      destination: [26.925771, 75.826735],
+      stops: [
+        [26.9012, 75.7556],
+        [26.9208, 75.765],
+        [26.9208, 75.765],
+        [26.9208, 75.765],
+      ],
+      color: "#d7843c", // Amber
+      popularity: 1.9,
+      distance: "7.2 km",
+      departureTime: "05:45 AM",
+      arrivalTime: "11:20 AM",
+      fare: "₹18",
+      busType: "Non-AC",
+    },
+    {
+      id: 16,
+      number: "RJ 15MK 7859",
+      name: "Panchawala To Transport Nagar",
+      eta: "37 min",
+      destination: [26.925771, 75.826735],
+      stops: [
+        [26.9012, 75.7556],
+        [26.9208, 75.765],
+        [26.9208, 75.765],
+        [26.9208, 75.765],
+        [26.9208, 75.765],
+        [26.9208, 75.765],
+      ],
+      color: "#933be0", // Amber
+      popularity: 1.9,
+      distance: "7.2 km",
+      departureTime: "03:45 PM",
+      arrivalTime: "11:20 PM",
+      fare: "₹20",
+      busType: "Non-AC",
+    },
   ];
 
   // Filter and sort routes based on search query, active tab, and selected filter
