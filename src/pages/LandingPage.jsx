@@ -500,7 +500,7 @@ function LandingPage() {
                         <div className="absolute top-0 bottom-0 right-[35%] w-1.5 bg-amber-100/80"></div>
                         <div className="absolute top-0 bottom-0 right-[15%] w-1.5 bg-amber-100/80"></div>
 
-                        {/* Hawa Mahal silhouette */}
+                   
                         <div className="absolute top-[10%] left-[10%] z-10">
                           <motion.svg
                             width="50"
@@ -542,8 +542,6 @@ function LandingPage() {
                             />
                           </motion.svg>
                         </div>
-
-                        {/* Jal Mahal silhouette */}
                         <div className="absolute top-[20%] right-[15%] z-10">
                           <motion.svg
                             width="40"

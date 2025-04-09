@@ -39,6 +39,7 @@ function Notifications() {
           time: "Just now",
           type: "alert",
           busNumber: "RJ14MK5562",
+          
           read: false,
           icon: <ExclamationTriangleIcon className="h-5 w-5" />,
           color: "#EF4444"
@@ -97,6 +98,7 @@ function Notifications() {
           read: true,
           icon: <BellAlertIcon className="h-5 w-5" />,
           color: "#6366F1"
+          
         }
       ]
       );

@@ -12,6 +12,7 @@ import {
   CheckCircleIcon,
   PaperAirplaneIcon,
   TruckIcon,
+  ExclamationCircleIcon,
 } from "@heroicons/react/24/outline";
 import SideNavBar from "./components/SideNavBar";
 
@@ -44,6 +45,7 @@ function FeedbackPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("bus_service");
+  const [error, setError] = useState(null);
 
   const emojis = [
     { id: 1, icon: "😡", label: t.terrible },
@@ -80,18 +82,41 @@ function FeedbackPage() {
     },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch("http://localhost:5000/api/feedback", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userName: userDetails.name,
+          email: userDetails.email,
+          contact: userDetails.contact,
+          category: selectedCategory,
+          rating: rating,
+          comment: comment,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Error submitting feedback");
+      }
+
       setIsSubmitting(false);
       setIsSubmitted(true);
-
-      // Redirect after showing success message
       setTimeout(() => navigate("/routes"), 2000);
-    }, 1500);
+    } catch (err) {
+      console.error("Feedback submission error:", err);
+      setIsSubmitting(false);
+      setError(err.message || "Error submitting feedback");
+    }
   };
 
   // Animation variants
@@ -173,8 +198,22 @@ function FeedbackPage() {
       {/* Sidebar */}
       <SideNavBar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
 
-      {/* Success Message - improved contrast */}
+      {/* Error Message */}
       <AnimatePresence>
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed top-20 left-0 right-0 z-50 flex justify-center"
+          >
+            <div className="bg-red-100 border border-red-300 text-red-800 px-4 py-3 rounded-lg shadow-lg flex items-center">
+              <ExclamationCircleIcon className="h-5 w-5 mr-2" />
+              {error}
+            </div>
+          </motion.div>
+        )}
+        {/* Success Message */}
         {isSubmitted && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}

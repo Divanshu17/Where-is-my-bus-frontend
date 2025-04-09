@@ -217,11 +217,8 @@ function RoutesPage() {
       number: "RJ 14WR 4576",
       name: "Sanganer To Kukas",
       eta: "12 min",
-      destination: [26.925771, 75.826735],
-      stops: [
-        [26.9012, 75.7556],
-        [26.9208, 75.765],
-      ],
+      destination: [26.807638, 75.847052],
+      stops: [[26.807638, 75.847052]],
       color: "#a07d14", // Amber
       popularity: 3.6,
       distance: "16.5 km",
