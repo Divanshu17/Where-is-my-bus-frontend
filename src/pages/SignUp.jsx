@@ -15,6 +15,7 @@ import {
 import { FcGoogle } from "react-icons/fc";
 import { useAuth } from "../context/AuthContext";
 import { getApiUrl, ENDPOINTS } from "../config/api";
+import { initializeGoogleAuth } from "../config/googleAuth";
 
 function SignUp() {
   const navigate = useNavigate();
@@ -32,35 +33,21 @@ function SignUp() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Initialize Google OAuth on component mount
   useEffect(() => {
-    // Load the Google API script
-    const loadGoogleScript = () => {
-      const script = document.createElement("script");
-      script.src = "https://accounts.google.com/gsi/client";
-      script.async = true;
-      script.defer = true;
-      script.onload = initializeGoogleAuth;
-      document.body.appendChild(script);
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
+    script.async = true;
+    script.defer = true;
+    script.onload = () => {
+      initializeGoogleAuth((response) => {
+        if (response.credential) {
+          handleGoogleResponse(response);
+        }
+      });
     };
+    document.body.appendChild(script);
 
-    // Initialize Google authentication
-    const initializeGoogleAuth = () => {
-      if (window.google) {
-        window.google.accounts.id.initialize({
-          client_id:
-            process.env.REACT_APP_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID", // Replace with your actual client ID
-          callback: handleGoogleResponse,
-          auto_select: false,
-        });
-      }
-    };
-
-    loadGoogleScript();
-
-    // Cleanup function
     return () => {
-      // Remove the script if component unmounts
       const script = document.querySelector(
         'script[src="https://accounts.google.com/gsi/client"]'
       );
@@ -70,98 +57,44 @@ function SignUp() {
     };
   }, []);
 
-  // Handle Google sign-in response
-  const handleGoogleResponse = (response) => {
-    if (response && response.credential) {
-      setIsGoogleLoading(true);
-
-      // Decode the JWT token to get user info
-      const base64Url = response.credential.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split("")
-          .map(function (c) {
-            return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-          })
-          .join("")
-      );
-
-      const { name, email, picture } = JSON.parse(jsonPayload);
-
-      // Send Google auth data to your backend
-      fetch(getApiUrl("/users/google-auth"), {
-        method: "POST",
+  const handleGoogleResponse = async (response) => {
+    try {
+      const res = await fetch(getApiUrl(ENDPOINTS.GOOGLE_CALLBACK), {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name,
-          email,
-          googleId: response.clientId,
-          token: response.credential,
-          picture,
-        }),
-      })
-        .then((response) => {
-          if (!response.ok) {
-            return response.json().then((data) => {
-              throw new Error(data.message || "Google authentication failed");
-            });
-          }
-          return response.json();
-        })
-        .then((data) => {
-          // Save user data to localStorage
-          localStorage.setItem(
-            "userData",
-            JSON.stringify({
-              fullName: data.fullName || name,
-              email: data.email || email,
-              phoneNumber: data.phoneNumber || "",
-              token: data.token,
-              profilePicture: data.profilePicture || picture,
-              isGoogleUser: true,
-            })
-          );
+        body: JSON.stringify({ credential: response.credential }),
+      });
 
-          // Navigate to next page
-          setIsGoogleLoading(false);
-          navigate("/location-permission");
-        })
-        .catch((error) => {
-          console.error("Google auth error:", error);
-          setFormErrors({ submit: error.message });
-          setIsGoogleLoading(false);
-        });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message || 'Google authentication failed');
+      }
+
+      // Save user data and token
+      localStorage.setItem('userData', JSON.stringify({
+        ...data.user,
+        token: data.token,
+        isGoogleUser: true
+      }));
+
+      // Login the user
+      login(data.user);
+      
+      navigate('/location-permission');
+    } catch (error) {
+      console.error('Google auth error:', error);
+      setFormErrors({ submit: error.message });
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
-  // Handle Google sign-in button click
   const handleGoogleSignIn = () => {
     setIsGoogleLoading(true);
-
-    if (window.google && window.google.accounts && window.google.accounts.id) {
-      // Prompt the Google sign-in popup
-      window.google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          // If the popup is not displayed, use the standard Google sign-in
-          window.google.accounts.id.renderButton(
-            document.getElementById("google-signin-button"),
-            { theme: "outline", size: "large", width: "100%" }
-          );
-          document.getElementById("google-signin-button").click();
-        }
-        setIsGoogleLoading(false);
-      });
-    } else {
-      console.error("Google API not loaded");
-      setFormErrors({
-        submit:
-          "Google sign-in is not available right now. Please try again later.",
-      });
-      setIsGoogleLoading(false);
-    }
+    window.location.href = getApiUrl(ENDPOINTS.GOOGLE_AUTH);
   };
 
   const handleSubmit = (e) => {
