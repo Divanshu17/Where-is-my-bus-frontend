@@ -33,8 +33,8 @@ export const ENDPOINTS = {
   PROFILE: '/users/profile',
 
   // Google Auth endpoints
-  GOOGLE_AUTH: '/users/auth/google',
-  GOOGLE_CALLBACK: '/users/auth/google/callback',
+  GOOGLE_AUTH: '/auth/google',
+  GOOGLE_CALLBACK: '/auth/google/callback',
 
   // Seat endpoints
   SEATS: '/seats',
