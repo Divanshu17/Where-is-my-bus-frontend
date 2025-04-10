@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import useTranslation from "../hooks/useTranslation";
+import { getApiUrl, ENDPOINTS } from "../config/api";
 import {
   ArrowLeftIcon,
   Bars3Icon,
@@ -88,7 +89,7 @@ function FeedbackPage() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:5000/api/feedback", {
+      const response = await fetch(getApiUrl('/feedback'), {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -38,6 +38,9 @@ export const ENDPOINTS = {
   // Ticket endpoints
   BOOK_TICKET: '/tickets/book',
 
+  // Feedback endpoint
+  FEEDBACK: '/feedback',
+
   // Test endpoints
   DB_STATUS: '/test/db-status',
 
